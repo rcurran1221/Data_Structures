@@ -1,6 +1,7 @@
 # python3
 
 from collections import namedtuple
+import heapq
 
 Request = namedtuple("Request", ["arrived_at", "time_to_process"])
 Response = namedtuple("Response", ["was_dropped", "started_at"])
@@ -21,10 +22,9 @@ class Buffer:
             return Response(True, -1)
         
         if self.finish_time:
-            self.finish_time.append(self.finish_time[-1] + int(request.time_to_process))
+            heapq.heappush(self.finish_time, self.finish_time[-1] + int(request.time_to_process))
         else:
-            self.finish_time.append(int(request.arrived_at) + int(request.time_to_process))
-        list.sort(self.finish_time)
+            heapq.heappush(self.finish_time, int(request.arrived_at) + int(request.time_to_process))
         
         return Response(False, self.finish_time[-1] - int(request.time_to_process))
 
