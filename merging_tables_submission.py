@@ -26,12 +26,18 @@ def merge(destination, source):
     if realDestination == realSource:
         return False
     
-    lines[realDestination] += lines[realSource]
-    lines[realSource] = 0
-    parent[realSource] = realDestination
-    
-    if lines[realDestination] > ans:
-        ans = lines[realDestination]
+    if rank[realDestination] > rank[realSource]:
+        parent[realSource] = realDestination
+        lines[realDestination] += lines[realSource]
+        lines[realSource] = 0
+        ans = max(ans, lines[realDestination])
+    else:
+        parent[realDestination] = realSource
+        lines[realSource] += lines[realDestination]
+        lines[realDestination] = 0
+        ans = max(ans, lines[realSource])
+        if rank[realDestination] == rank[realSource]:
+            rank[realSource] +=1
     
     return True
 
